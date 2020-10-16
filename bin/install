@@ -10,18 +10,13 @@ _install() {
 	local version="$2"
 	local install_path="$3"
 	local tmp_download_dir="$4"
-	if [ $install_type != "version" ]; then
-		cd $tmp_download_dir
-		v=v$version
-		f=loki-linux-amd64.zip
-		if [ ! -f "$f" ]; then
-			curl -Lo "$f" "https://github.com/grafana/loki/releases/download/v1.6.1/$f"
-		fi
-		if [ ! -d "$(basename $f .zip)" ]; then unzip $f; fi
-		ls *
+	cd $tmp_download_dir
+	v=v$version
+	f=loki-linux-amd64.zip
+	if [ ! -f "$f" ]; then
+		curl -Lo "$f" "https://github.com/grafana/loki/releases/download/v1.6.1/$f"
 	fi
-
+	if [ ! -d "$(basename $f .zip)" ]; then unzip $f; fi
+	mv ./loki-linux-amd64 $install_path/loki
 }
 _install "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH" "$tmp_download_dir"
-
-asdf reshim "$(plugin_name)" "$ASDF_INSTALL_VERSION"
